@@ -1,14 +1,16 @@
 from django.urls import path
 
 from hacelo.views import (
-    index,
-    TaskDetailView
+    TaskListView,
+    TaskDetailView,
+    WorkerDetailView,
 )
 
 
 urlpatterns = [
-    path("", index, name="index"),
+    path("", TaskListView.as_view(), name="index"),
     path("task/<int:pk>/detail", TaskDetailView.as_view(), name="task-detail"),
+    path("worker/<int:pk>/detail", WorkerDetailView.as_view(), name="worker-detail"),
 ]
 
 app_name = "hacelo"
