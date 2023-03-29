@@ -41,10 +41,10 @@ def get_sentinel_task_type():
 class Task(models.Model):
 
     PRIORYTY_CHOICES = (
-        ("URG", "Small"),
-        ("HI", "High"),
-        ("MED", "Medium"),
-        ("LOW", "Low"),
+        ("1UR", "Urgent"),
+        ("2HI", "High"),
+        ("3ME", "Medium"),
+        ("4LO", "Low"),
     )
 
     name = models.CharField(max_length=255)
