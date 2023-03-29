@@ -2,9 +2,10 @@ from django.db.models import Count
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
+from django.urls import reverse_lazy
 
 from hacelo.models import Task, Worker
-from hacelo.forms import TaskSearchForm
+from hacelo.forms import TaskSearchForm, WorkerForm
 
 
 class TaskListView(generic.ListView):
@@ -37,3 +38,18 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Worker
+
+
+class WorkerCreateView(generic.CreateView):
+    model = Worker
+    form_class = WorkerForm
+
+
+class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Worker
+    form_class = WorkerForm
+
+
+class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Worker
+    success_url = reverse_lazy("hacelo:index")
