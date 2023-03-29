@@ -5,7 +5,7 @@ from django.db.models.query import QuerySet
 from django.urls import reverse_lazy
 
 from hacelo.models import Task, Worker
-from hacelo.forms import TaskSearchForm, WorkerForm
+from hacelo.forms import TaskSearchForm, TaskForm, WorkerForm
 
 
 class TaskListView(generic.ListView):
@@ -34,6 +34,11 @@ class TaskListView(generic.ListView):
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     model = Task
+
+
+class TaskCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Task
+    form_class = TaskForm
 
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
