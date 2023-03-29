@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
 from django.db.models import Count
+from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from hacelo.models import Task
 
@@ -13,3 +15,7 @@ def index(request: HttpRequest) -> HttpResponse:
     }
 
     return render(request, "hacelo/index.html", context)
+
+
+class TaskDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Task
