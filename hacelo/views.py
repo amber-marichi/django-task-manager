@@ -74,3 +74,11 @@ def assign_task_to_worker(request: HttpRequest, pk: int) -> HttpResponse:
     else:
         worker.tasks.add(pk)
     return HttpResponseRedirect(reverse_lazy("hacelo:task-detail", args=[pk]))
+
+
+@login_required
+def mark_task_completed(request: HttpRequest, pk: int) -> HttpResponse:
+    task = Task.objects.get(id=pk)
+    task.is_completed = True
+    task.save()
+    return HttpResponseRedirect(reverse_lazy("hacelo:task-detail", args=[pk]))

@@ -9,6 +9,7 @@ from hacelo.views import (
     WorkerDeleteView,
     WorkerUpdateView,
     assign_task_to_worker,
+    mark_task_completed,
 )
 
 
@@ -20,7 +21,8 @@ urlpatterns = [
     path("worker/create", WorkerCreateView.as_view(), name="worker-create"),
     path("worker/<int:pk>/delete", WorkerDeleteView.as_view(), name="worker-delete"),
     path("worker/<int:pk>/update", WorkerUpdateView.as_view(), name="worker-update"),
-    path("task/<int:pk>/assign", assign_task_to_worker, name="worker-assign"),
+    path("task/<int:pk>/assign", assign_task_to_worker, name="task-assign"),
+    path("task/<int:pk>/complete", mark_task_completed, name="task-complete"),
 ]
 
 app_name = "hacelo"
