@@ -3,7 +3,7 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from django.db.models.query import QuerySet, F
+from django.db.models.query import QuerySet
 from django.urls import reverse_lazy
 
 from hacelo.models import Task, Worker
@@ -38,7 +38,9 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     model = Task
 
     def get_queryset(self) -> QuerySet:
-        return Task.objects.select_related("task_type")
+        queryset = super().get_queryset()
+        queryset.select_related("task_type")
+        return queryset.prefetch_related("assignees__position")
 
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
@@ -48,6 +50,10 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Worker
+    
+    def get_queryset(self) -> QuerySet:
+        queryset = super().get_queryset()
+        return queryset.prefetch_related("tasks")
 
 
 class WorkerCreateView(generic.CreateView):
