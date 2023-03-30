@@ -14,7 +14,7 @@ class TaskListView(generic.ListView):
     model = Task
     context_object_name = "tasks"
     template_name = "hacelo/index.html"
-    paginate_by = 10
+    paginate_by = 4
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)

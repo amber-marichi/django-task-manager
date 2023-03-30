@@ -46,4 +46,5 @@ class WorkerForm(UserCreationForm):
             "first_name",
             "last_name",
             "position",
+            "email",
         )
