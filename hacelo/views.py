@@ -1,7 +1,9 @@
 from django.db.models import Count
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models.query import QuerySet
+from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.db.models.query import QuerySet, F
 from django.urls import reverse_lazy
 
 from hacelo.models import Task, Worker
@@ -35,6 +37,9 @@ class TaskListView(generic.ListView):
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     model = Task
 
+    def get_queryset(self) -> QuerySet:
+        return Task.objects.select_related("task_type")
+
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
@@ -58,3 +63,14 @@ class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
 class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Worker
     success_url = reverse_lazy("hacelo:index")
+
+
+@login_required
+def assign_task_to_worker(request: HttpRequest, pk: int) -> HttpResponse:
+    worker = Worker.objects.get(id=request.user.id)
+    task = Task.objects.get(id=pk)
+    if task.assignees.filter(id=request.user.id).exists():
+        worker.tasks.remove(pk)
+    else:
+        worker.tasks.add(pk)
+    return HttpResponseRedirect(reverse_lazy("hacelo:task-detail", args=[pk]))
