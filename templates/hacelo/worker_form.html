@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+  Worker creation page
+{% endblock title %}
+
+
+{% block content %}
+
+  <div class="container">
+    <div class="row pt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                
+                <div class="card-header text-center py-4">
+                  <h4 class="title">
+                    {{ object|yesno:"Update,Register" }} Worker
+                  </h4>
+                  
+                  <h6 class="card-category">
+                    {% if form.errors %}
+                      <span class="text-danger">Your credentials didn't match. Please try again</span>
+                    {% else %}
+                      <span>Add your credentials</span>
+                    {% endif %}
+                  </h6>
+                </div>
+                  
+                <form role="form" method="post" action="">
+                        
+                  {% csrf_token %}  
+                  <div class="card-body">
+                    <div class="form-group">
+                      <input name = "username" type="text" class="form-control" placeholder="Username">
+                    </div>
+                    <div class="form-group">
+                      <input name = "first_name" type="text" class="form-control" placeholder="First Name">
+                    </div>
+                    <div class="form-group">
+                      <input name = "last_name" type="text" class="form-control" placeholder="Last Name">
+                    </div>
+                    <div class="form-group">
+                      <input name = "email" type="email" class="form-control" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                      <select name="position" id="inputState" class="form-control" placeholder="position">
+                        {% for p in form.position %}
+                          <option>{{ p }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <input name = "password1" type="password" class="form-control" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                      <input name = "password2" type="password" class="form-control" placeholder="Repeat Password">
+                    </div>
+                  </div>
+                    <div class="card-footer text-center">
+                        <button type="submit" name="login" class="btn btn-fill btn-primary">Submit</button>
+                        
+                        <br /><br />
+                        <p>
+                            Already have an account? <a href="{% url 'login' %}" class="text-primary">Login</a>                            
+                        </p>
+                        
+                        {% if object %}
+                          <input type="hidden" name="next" value="{% url 'hacelo:worker-detail' pk=object.id %}">
+                        {% else %}
+                          <input type="hidden" name="next" value="{% url 'hacelo:index' %}">
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+  

@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+  {{ worker.username }} user page
+{% endblock title %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-md-9 mt-5 pt-2 mt-5">
+    <div class="card">
+      <div class="card-header card-header-rose">
+        <ul class="nav nav-tabs">
+          {% if worker == user %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'hacelo:worker-update' pk=worker.id %}">edit</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'hacelo:worker-delete' pk=worker.id %}">delete</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">{{ worker.username }}</h3>
+    
+        <h2 class="card-text">{{ worker.first_name }} {{ worker.last_name }}</h2>
+        <h4 class="card-text">Email:    {{ worker.email }}</h4>
+        <h4 class="card-text">Position: {{ worker.position }}</h4>
+        <br>
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6 col-md-12">
+    <div class="card ">
+      <div class="card-header">
+        <h4 class="card-title">Ongoing tasks</h4>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table tablesorter " id="">
+            <thead class=" text-primary">
+                <tr>
+                  <th>
+                    Title
+                  </th>
+                  <th>
+                    Task type
+                  </th>
+                  <th>
+                    Priority
+                  </th>
+                  <th>
+                    Deadline
+                  </th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for task in worker.tasks.all %}
+              {% if not task.is_completed %} 
+              <tr>
+                <td>
+                  <a href="{{ task.get_absolute_url }}">{{ task.name }}</a>
+                </td>
+                <td>
+                  {{ task.task_type }}
+                </td>
+                <td>
+                  {{ task.get_priority_display }}
+                </td>
+                <td>
+                  {{ task.deadline }}
+                </td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-12">
+    <div class="card ">
+      <div class="card-header">
+        <h4 class="card-title">Finished tasks</h4>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table tablesorter " id="">
+            <thead class=" text-primary">
+                <tr>
+                  <th>
+                    Title
+                  </th>
+                  <th>
+                    Task type
+                  </th>
+                  <th>
+                    Priority
+                  </th>
+                  <th>
+                    Deadline
+                  </th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for task in worker.tasks.all %}
+              {% if task.is_completed %} 
+              <tr>
+                <td>
+                  <a href="{{ task.get_absolute_url }}">{{ task.name }}</a>
+                </td>
+                <td>
+                  {{ task.task_type }}
+                </td>
+                <td>
+                  {{ task.get_priority_display }}
+                </td>
+                <td>
+                  {{ task.deadline }}
+                </td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+    

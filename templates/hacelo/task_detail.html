@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+  Task {{ task.id }}: {{ task.name }}</title>
+{% endblock title %}
+
+
+{% block content %}
+  
+  <div class="row">
+    <div class="col-md-6 mt-5 pt-2 mt-5">
+      <div class="card">
+        <div class="card-header ">
+          <h4 class="card-title">Task # {{ task.id }}</h4>
+          {% if not task.is_completed %}
+            {% if task in user.tasks.all %}
+              <a href="{% url 'hacelo:task-assign' pk=task.id %}">
+                <button class="btn btn-primary btn-simple">Abandon task</button>
+              </a>
+              <a href="{% url 'hacelo:task-complete' pk=task.id %}">
+                <button class="btn btn-primary btn-simple">Finish task</button>
+              </a>
+            {% else %}
+              <a href="{% url 'hacelo:task-assign' pk=task.id %}">
+                <button class="btn btn-primary btn-simple">Join task</button>
+              </a> 
+            {% endif %}
+          {% else %}
+            <h2 class="card-title">The task is completed!</h2>
+          {% endif %}
+        </div>
+        <div class="card-body">
+              <h2 class="card-title">{{ task.name }}</h2>
+              <hr>
+              <h3 class="card-title">priority: <strong>{{ task.get_priority_display }}</strong></h3>
+              <h4 class="card-text">task type: {{ task.task_type }}</h4>
+              <h4 class="card-text">deadline: {{ task.deadline }}</h4>
+              <br>
+              <hr>
+              <p class="card-text">{{ task.description }}</p>
+              
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mt-5 pt-2 mt-5">
+      <div class="card ">
+        <div class="card-header">
+          <h4 class="card-title"> Assignees</h4>
+        </div>
+        <div class="card-body">
+          {% if task.assignees %}
+          <div class="table-responsive">
+            <table class="table tablesorter " id="">
+              <thead class=" text-primary">
+                  <tr>
+                    <th>
+                      Name
+                    </th>
+                    <th>
+                      Position
+                    </th>
+                    <th>
+                      email
+                    </th>
+                  </tr>
+                </thead>
+              <tbody>
+                {% for worker in task.assignees.all %}
+                <tr>
+                  <td>
+                    <a href="{{ worker.get_absolute_url }}">
+                      {{ worker.username }}
+                    </a>
+                    {% if worker == user %}
+                       (You)
+                    {% endif %}
+                  </td>
+                  <td>
+                    {{ worker.position }}
+                  </td>
+                  <td>
+                    {{ worker.email }}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              </table>
+            </div>
+            {% else %}
+              <p>No worker assigned on this task yet!</p>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

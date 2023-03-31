@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+  New task
+{% endblock title %}
+
+
+{% block content %}
+  <div class="container">
+    <div class="row pt-5">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                
+              <div class="card-header text-center py-4">
+                <h4 class="title">
+                  Add new task
+                </h4>
+                
+                <h6 class="card-category">
+                  {% if form.errors %}
+                    <span class="text-danger">Please check the entered info and try again</span>
+                  {% else %}
+                    <span>Specify details in forms</span>
+                  {% endif %}
+                </h6>
+              </div>
+                
+              <form role="form" method="post" action="">
+                      
+                {% csrf_token %}  
+                <div class="card-body">
+                  <label for="inputshortdescription">Short description, title</label>
+                  <div class="form-group">
+                    <input name = "name" type="text" id="inputshortdescription" class="form-control">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="inputStatepriority">Select task prioity</label>
+                    <select name="priority" id="inputStateriority" class="form-control">
+                      {% for p in form.priority %}
+                      <option>{{ p }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputStatetasktype">Select task type</label>
+                    <select name="task_type" id="inputStatetasktype" class="form-control">
+                      {% for p in form.task_type %}
+                      <option>{{ p }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="FormControlTextarea1">Task Details and Description</label>
+                    <textarea name="description" class="form-control" id="FormControlTextarea1" rows="4"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label>Deadline till</label>
+                    {{ form.deadline }}
+                  </div>
+                  <div class="card-footer text-center">
+                    <button type="submit" class="btn btn-fill btn-primary">Create</button>
+                  </div>
+              </form>
+            </div>
+        </div>
+    </div>
+  </div>
+{% endblock content %}
