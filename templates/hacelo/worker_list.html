@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+  List of workers
+{% endblock title %}
+
+
+{% block content %}
+<div class="container">
+  <div class="col-12 mt-4 pt-2 mt-5">
+    <a href="{% url 'hacelo:worker-list' %}">clear search</a>
+      <div class="card">
+        <form action="" method="get">
+          <div class="card-body">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <i class="tim-icons icon-zoom-split"></i>
+                 </div>      
+               </div>
+              <input name="username" type="text" class="form-control" placeholder="Search among workers...">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Workers available</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table tablesorter " id="">
+              <thead class=" text-primary">
+                  <tr>
+                    <th>
+                      Name
+                    </th>
+                    <th>
+                      Position
+                    </th>
+                    <th>
+                      ongoing
+                    </th>
+                    <th>
+                      finished
+                    </th>
+                  </tr>
+                </thead>
+              <tbody>
+                {% for worker in workers %}
+                  <tr>
+                    <td>
+                      <a href="{{ worker.get_absolute_url }}">
+                        {{ worker.username }}
+                      </a>
+                      {% if worker == user %}
+                         (You)
+                      {% endif %}
+                    </td>
+                    <td>
+                      {{ worker.position.name }}
+                    </td>
+                    <td>
+                      {{ worker.ongoing }}
+                    </td>
+                    <td>
+                      {{ worker.finished }}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+  

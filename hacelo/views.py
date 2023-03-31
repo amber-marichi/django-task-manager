@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -7,14 +7,14 @@ from django.db.models.query import QuerySet
 from django.urls import reverse_lazy
 
 from hacelo.models import Task, Worker
-from hacelo.forms import TaskSearchForm, TaskForm, WorkerForm
+from hacelo.forms import TaskSearchForm, TaskForm, WorkerForm, WorkerSearchForm
 
 
 class TaskListView(generic.ListView):
     model = Task
     context_object_name = "tasks"
     template_name = "hacelo/index.html"
-    paginate_by = 4
+    paginate_by = 5
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
@@ -69,6 +69,29 @@ class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
 class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Worker
     success_url = reverse_lazy("hacelo:index")
+
+
+class WorkerListView(generic.ListView):
+    model = Worker
+    paginate_by = 10
+    context_object_name = "workers"
+
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+        username = self.request.GET.get("username", "")
+        context["search_form"] = WorkerSearchForm(
+            initial={"username": username,}
+        )
+        return context
+
+    def get_queryset(self) -> QuerySet:
+        queryset = Worker.objects.select_related("position").annotate(ongoing=Count('tasks', filter=Q(tasks__is_completed=False)), finished=Count('tasks', filter=Q(tasks__is_completed=True))).order_by("-ongoing") #.annotate(finished=Count('tasks', filter=Q(tasks__is_finished=True)))
+        form = WorkerSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(
+                username__icontains=form.cleaned_data["username"]
+            )
+        return queryset
 
 
 @login_required
