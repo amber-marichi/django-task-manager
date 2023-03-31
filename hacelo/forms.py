@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-from datetime import date
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+from django_flatpickr.widgets import DateTimePickerInput
 
 from hacelo.models import Task, TaskType
 
@@ -31,16 +33,19 @@ class TaskForm(forms.ModelForm):
     #     widget=forms.CheckboxSelectMultiple,
     #     required=False,
     # )
-    today = date.today()
     deadline = forms.DateTimeField(
-        widget=forms.widgets.DateTimeInput(
-            attrs={"type": "date", "min": today, "value": today}
-        ),
+        widget=DateTimePickerInput(attrs={"value": timezone.now()}),
     )
 
     class Meta:
         model = Task
         exclude = ["is_completed",]
+
+    def clean_deadline(self):
+        deadline = self.cleaned_data["deadline"]
+        if deadline < timezone.now():
+            raise ValidationError("The date cannot be in the past")
+        return deadline
 
 
 class WorkerForm(UserCreationForm):    
