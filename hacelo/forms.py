@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from datetime import date
 
-from hacelo.models import Task, Worker
+from hacelo.models import Task, TaskType
 
 
 class TaskSearchForm(forms.Form):
@@ -26,11 +26,11 @@ class WorkerSearchForm(forms.Form):
 
 
 class TaskForm(forms.ModelForm):
-    assignees = forms.ModelMultipleChoiceField(
-        queryset=get_user_model().objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-    )
+    # assignees = forms.ModelMultipleChoiceField(
+    #     queryset=get_user_model().objects.all(),
+    #     widget=forms.CheckboxSelectMultiple,
+    #     required=False,
+    # )
     today = date.today()
     deadline = forms.DateTimeField(
         widget=forms.widgets.DateTimeInput(
@@ -49,10 +49,17 @@ class WorkerForm(UserCreationForm):
         self.fields["position"].required = True
 
     class Meta:
-        model = Worker
+        model = get_user_model()
         fields = UserCreationForm.Meta.fields + (
             "first_name",
             "last_name",
             "position",
             "email",
         )
+
+
+class TaskTypeForm(forms.ModelForm):
+
+    class Meta:
+        model = TaskType
+        fields = "__all__"

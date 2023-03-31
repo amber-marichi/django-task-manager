@@ -6,8 +6,14 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.db.models.query import QuerySet
 from django.urls import reverse_lazy
 
-from hacelo.models import Task, Worker
-from hacelo.forms import TaskSearchForm, TaskForm, WorkerForm, WorkerSearchForm
+from hacelo.models import Task, Worker, TaskType
+from hacelo.forms import (
+    TaskSearchForm,
+    TaskForm,
+    TaskTypeForm,
+    WorkerForm,
+    WorkerSearchForm,
+)
 
 
 class TaskListView(generic.ListView):
@@ -92,6 +98,13 @@ class WorkerListView(generic.ListView):
                 username__icontains=form.cleaned_data["username"]
             )
         return queryset
+
+
+class TaskTypeCreate(LoginRequiredMixin, generic.CreateView):
+    model = TaskType
+    form_class = TaskTypeForm
+    template_name = "hacelo/task_type_create.html"
+    success_url = reverse_lazy("hacelo:task-create")
 
 
 @login_required

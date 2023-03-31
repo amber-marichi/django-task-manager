@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+  New Task Type
+{% endblock title %}
+  
+
+
+{% block content %}
+  <div class="container">
+    <div class="row pt-5">
+        <div class="col-md-6 offset-md-3">
+          <div class="card">
+            <div class="card-header text-center py-4">
+              <h4 class="title">
+                Create new task type
+              </h4>
+
+              <h6 class="card-category">
+                {% if form.errors %}
+                  <span class="text-danger">Something went wrong. Please try again</span>
+                {% else %}
+                  <span>Input name of new task type</span>
+                {% endif %}
+              </h6>
+            </div>
+
+            <form role="form" method="post" action="">
+
+              {% csrf_token %}  
+              <div class="card-body">
+                <div class="form-group">
+                  <input name = "name" type="text" class="form-control" placeholder="Task type name">
+                </div>
+                <div class="card-footer text-center">
+                  <button type="submit" class="btn btn-fill btn-primary">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+  </div>
+{% endblock content %}
+  
