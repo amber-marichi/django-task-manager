@@ -1,12 +1,13 @@
-from django.db.models import Count, Q
 from django.views import generic
+from django.db.models import Count, Q
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.db.models.query import QuerySet
 from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
 
-from hacelo.models import Task, Worker, TaskType
+from hacelo.models import Task, TaskType
 from hacelo.forms import (
     TaskSearchForm,
     TaskForm,
@@ -55,7 +56,7 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
-    model = Worker
+    model = get_user_model()
     
     def get_queryset(self) -> QuerySet:
         queryset = super().get_queryset()
@@ -63,22 +64,22 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
 
 
 class WorkerCreateView(generic.CreateView):
-    model = Worker
+    model = get_user_model()
     form_class = WorkerForm
 
 
 class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
-    model = Worker
+    model = get_user_model()
     form_class = WorkerForm
 
 
 class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
-    model = Worker
+    model = get_user_model()
     success_url = reverse_lazy("hacelo:index")
 
 
 class WorkerListView(generic.ListView):
-    model = Worker
+    model = get_user_model()
     paginate_by = 10
     context_object_name = "workers"
 
@@ -91,7 +92,7 @@ class WorkerListView(generic.ListView):
         return context
 
     def get_queryset(self) -> QuerySet:
-        queryset = Worker.objects.select_related("position").annotate(ongoing=Count('tasks', filter=Q(tasks__is_completed=False)), finished=Count('tasks', filter=Q(tasks__is_completed=True))).order_by("-ongoing") #.annotate(finished=Count('tasks', filter=Q(tasks__is_finished=True)))
+        queryset = get_user_model().objects.select_related("position").annotate(ongoing=Count('tasks', filter=Q(tasks__is_completed=False)), finished=Count('tasks', filter=Q(tasks__is_completed=True))).order_by("-ongoing") #.annotate(finished=Count('tasks', filter=Q(tasks__is_finished=True)))
         form = WorkerSearchForm(self.request.GET)
         if form.is_valid():
             return queryset.filter(
@@ -109,7 +110,7 @@ class TaskTypeCreate(LoginRequiredMixin, generic.CreateView):
 
 @login_required
 def assign_task_to_worker(request: HttpRequest, pk: int) -> HttpResponse:
-    worker = Worker.objects.get(id=request.user.id)
+    worker = get_user_model().objects.get(id=request.user.id)
     task = Task.objects.get(id=pk)
     if task.assignees.filter(id=request.user.id).exists():
         worker.tasks.remove(pk)
