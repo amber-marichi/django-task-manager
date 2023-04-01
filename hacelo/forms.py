@@ -13,9 +13,6 @@ class TaskSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(
-            attrs={"placeholder": "search task by name..."}
-        ),
     )
 
 
@@ -28,18 +25,13 @@ class WorkerSearchForm(forms.Form):
 
 
 class TaskForm(forms.ModelForm):
-    # assignees = forms.ModelMultipleChoiceField(
-    #     queryset=get_user_model().objects.all(),
-    #     widget=forms.CheckboxSelectMultiple,
-    #     required=False,
-    # )
     deadline = forms.DateTimeField(
         widget=DateTimePickerInput(attrs={"value": timezone.now()}),
     )
 
     class Meta:
         model = Task
-        exclude = ["is_completed",]
+        exclude = ["is_completed", "assignees",]
 
     def clean_deadline(self):
         deadline = self.cleaned_data["deadline"]
@@ -48,7 +40,7 @@ class TaskForm(forms.ModelForm):
         return deadline
 
 
-class WorkerForm(UserCreationForm):    
+class WorkerForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["position"].required = True

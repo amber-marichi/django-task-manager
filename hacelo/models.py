@@ -21,7 +21,7 @@ class Worker(AbstractUser):
     )
 
     def __str__(self) -> str:
-        return self.username
+        return f"{self.username} ({self.first_name} {self.last_name})"
     
     def get_absolute_url(self):
         return reverse("hacelo:worker-detail", kwargs={"pk": self.pk})
@@ -64,7 +64,7 @@ class Task(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.id}({self.priority}) {self.description}"
+        return f"{self.id}({self.get_priority_display()}) {self.name}"
     
     def get_absolute_url(self):
         return reverse("hacelo:task-detail", kwargs={"pk": self.pk})

@@ -37,7 +37,7 @@
                 <label for="inputStatepriority">Select task prioity</label>
                 <select name="priority" id="inputStateriority" class="form-control">
                   {% for p in form.priority %}
-                  <option>{{ p }}</option>
+                    {{ p }}
                   {% endfor %}
                 </select>
               </div>
@@ -45,7 +45,7 @@
                 <label for="inputStatetasktype">Select task type or  <a href="{% url 'hacelo:tasktype-create' %}">add new</a></label>
                 <select name="task_type" id="inputStatetasktype" class="form-control">
                   {% for p in form.task_type %}
-                  <option>{{ p }}</option>
+                    {{ p }}
                   {% endfor %}
                 </select>
               </div>
