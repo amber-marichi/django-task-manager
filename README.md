@@ -26,3 +26,9 @@ python manage.py runserver
 * User can create task, browse available tasks, join team-members on existing, and track between ongoing and finished.
 * Find out who are on task with you by see their details, contact and history.
 
+
+## To check out
+
+use these creds:
+login: test.user
+password: u$er4321
