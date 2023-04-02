@@ -7,11 +7,8 @@
   <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet"/>
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
   {% load static %}
-  <link rel="stylesheet" href="{% static 'css/nucleo-icons.css' %}">
-  {% load static %}
   <link rel="stylesheet" href="{% static 'css/black-dashboard.css' %}">
-  <!-- {% load static %}
-  <link rel="stylesheet" href="{% static 'css/theme-switcher.css' %}"> -->
+  <link rel="stylesheet" href="{% static 'css/nucleo-icons.css' %}">
   <title>
     Hacelo - {% block title %}{% endblock title %}
   </title>
@@ -22,8 +19,7 @@
     {% include "includes/navigation.html" %}
     <div class="main-panel">
       {% block content %}{% endblock content %}
-      
-      
+
       {% block pagination %}
         {% include "includes/pagination.html" %}
       {% endblock pagination %}
