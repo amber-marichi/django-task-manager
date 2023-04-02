@@ -31,7 +31,7 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        exclude = ["is_completed", "assignees",]
+        exclude = ["is_completed", "assignees", ]
 
     def clean_deadline(self):
         deadline = self.cleaned_data["deadline"]

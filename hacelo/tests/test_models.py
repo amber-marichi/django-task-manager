@@ -25,7 +25,7 @@ class ModelsTests(TestCase):
             str(worker),
             f"{worker.username} ({worker.first_name} {worker.last_name})"
         )
-    
+
     def test_tasktype_and_task_str(self) -> None:
         tasktype = TaskType.objects.create(
             name="TestTaskType",

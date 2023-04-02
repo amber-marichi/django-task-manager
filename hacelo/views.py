@@ -27,10 +27,10 @@ class TaskListView(generic.ListView):
         context = super().get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
         context["search_form"] = TaskSearchForm(
-            initial={"name": name,}
+            initial={"name": name, }
         )
         return context
-    
+
     def get_queryset(self) -> QuerySet:
         queryset = Task.objects.filter(is_completed=False).select_related("task_type").annotate(Count("assignees")).order_by("priority", "deadline")
         form = TaskSearchForm(self.request.GET)
@@ -57,7 +57,7 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = get_user_model()
-    
+
     def get_queryset(self) -> QuerySet:
         queryset = super().get_queryset()
         return queryset.prefetch_related("tasks")
@@ -87,12 +87,12 @@ class WorkerListView(generic.ListView):
         context = super().get_context_data(**kwargs)
         username = self.request.GET.get("username", "")
         context["search_form"] = WorkerSearchForm(
-            initial={"username": username,}
+            initial={"username": username, }
         )
         return context
 
     def get_queryset(self) -> QuerySet:
-        queryset = get_user_model().objects.select_related("position").annotate(ongoing=Count('tasks', filter=Q(tasks__is_completed=False)), finished=Count('tasks', filter=Q(tasks__is_completed=True))).order_by("-ongoing") #.annotate(finished=Count('tasks', filter=Q(tasks__is_finished=True)))
+        queryset = get_user_model().objects.select_related("position").annotate(ongoing=Count('tasks', filter=Q(tasks__is_completed=False)), finished=Count('tasks', filter=Q(tasks__is_completed=True))).order_by("-ongoing")
         form = WorkerSearchForm(self.request.GET)
         if form.is_valid():
             return queryset.filter(

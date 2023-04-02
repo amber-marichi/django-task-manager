@@ -31,19 +31,19 @@ class AdminSiteTests(TestCase):
             priority="1UR",
             task_type=TaskType.objects.create(name="TestTaskType",),
         )
-    
+
     def test_worker_list_position_field(self) -> None:
         url = reverse("admin:hacelo_worker_changelist")
         response = self.client.get(url)
 
         self.assertContains(response, self.worker.position.name)
-    
+
     def test_worker_details_position_field(self) -> None:
         url = reverse("admin:hacelo_worker_change", args=[self.worker.id])
         response = self.client.get(url)
 
         self.assertContains(response, self.worker.position.name)
-    
+
     def test_worker_create_custom_fields_present(self) -> None:
         url = reverse("admin:hacelo_worker_add")
         response = self.client.get(url)
@@ -52,7 +52,7 @@ class AdminSiteTests(TestCase):
         self.assertContains(response, "last_name")
         self.assertContains(response, "email")
         self.assertContains(response, "position")
-    
+
     def test_task_list_custom_fields(self) -> None:
         url = reverse("admin:hacelo_task_changelist")
         response = self.client.get(url)

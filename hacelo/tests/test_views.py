@@ -14,7 +14,7 @@ class PrivateWorkerTests(TestCase):
             password="13admin31",
         )
         self.client.force_login(self.user)
-    
+
     def test_create_worker(self) -> None:
         pos = Position.objects.create(
             name="TestPosition",
@@ -32,7 +32,7 @@ class PrivateWorkerTests(TestCase):
 
         self.client.post(reverse("hacelo:worker-create"), data=form_input)
         worker = get_user_model().objects.get(username=form_input["username"])
-    
+
         self.assertEqual(worker.first_name, form_input["first_name"])
         self.assertEqual(worker.position.name, pos.name)
         self.assertEqual(worker.email, form_input["email"])
@@ -50,12 +50,14 @@ class PublicTaskTest(TestCase):
             task_type=TaskType.objects.create(name="TestTaskType",),
         )
 
-    def test_login_required(self):        
-        response = self.client.get(reverse("hacelo:task-detail", kwargs={"pk":self.task.id}))
+    def test_login_required(self):
+        response = self.client.get(
+            reverse("hacelo:task-detail", kwargs={"pk": self.task.id})
+        )
 
         self.assertNotEqual(response.status_code, 200)
         self.assertEqual(response.status_code, 302)
-    
+
     def test_login_successful(self):
         user = get_user_model().objects.create_user(
             username="admin",
@@ -63,13 +65,16 @@ class PublicTaskTest(TestCase):
         )
         self.client.force_login(user)
 
-        response = self.client.get(reverse("hacelo:task-detail", kwargs={"pk":self.task.id}))
+        response = self.client.get(
+            reverse("hacelo:task-detail", kwargs={"pk": self.task.id})
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.context["task"],
             self.task
         )
+
 
 class WorkerSearchTest(TestCase):
     def test_serch_result_workers(self) -> None:
@@ -86,8 +91,12 @@ class WorkerSearchTest(TestCase):
             password="13admin3333",
         )
 
-        response = self.client.get(reverse("hacelo:worker-list") + "?username=TeStUSe")
-        workers = get_user_model().objects.filter(username__icontains="TeStUSe")
+        response = self.client.get(
+            reverse("hacelo:worker-list") + "?username=TeStUSe"
+        )
+        workers = get_user_model().objects.filter(
+            username__icontains="TeStUSe"
+        )
 
         self.assertQuerysetEqual(
             response.context["workers"],

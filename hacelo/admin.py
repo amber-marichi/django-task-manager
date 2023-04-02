@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 
 from hacelo.models import Position, Task, TaskType, Worker
 
@@ -16,21 +16,21 @@ class WorkerAdmin(UserAdmin):
         (
             (
                 "Personal info",
-                    {
-                        "fields": (
-                            "first_name",
-                            "last_name",
-                            "email",
-                        )
-                    },
+                {
+                    "fields": (
+                        "first_name",
+                        "last_name",
+                        "email",
+                    )
+                },
             ),
             (
                 "Professional info",
-                    {
-                        "fields": (
-                            "position",
-                        )
-                    },
+                {
+                    "fields": (
+                        "position",
+                    )
+                },
             ),
         )
     )
