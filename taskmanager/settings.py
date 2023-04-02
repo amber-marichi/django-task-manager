@@ -27,7 +27,10 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'https://task-manager-m1jl.onrender.com'
+]
 
 INTERNAL_IPS = [
     '127.0.0.1',
