@@ -32,7 +32,10 @@ class TaskListView(generic.ListView):
         return context
 
     def get_queryset(self) -> QuerySet:
-        queryset = Task.objects.filter(is_completed=False).select_related("task_type").annotate(Count("assignees")).order_by("priority", "deadline")
+        queryset = (
+            Task.objects.filter(is_completed=False).select_related("task_type")
+            .annotate(Count("assignees")).order_by("priority", "deadline")
+        )
         form = TaskSearchForm(self.request.GET)
         if form.is_valid():
             return queryset.filter(
@@ -92,7 +95,12 @@ class WorkerListView(generic.ListView):
         return context
 
     def get_queryset(self) -> QuerySet:
-        queryset = get_user_model().objects.select_related("position").annotate(ongoing=Count('tasks', filter=Q(tasks__is_completed=False)), finished=Count('tasks', filter=Q(tasks__is_completed=True))).order_by("-ongoing")
+        queryset = (
+            get_user_model().objects.select_related("position").annotate(
+                ongoing=Count("tasks", filter=Q(tasks__is_completed=False)),
+                finished=Count("tasks", filter=Q(tasks__is_completed=True))
+            ).order_by("-ongoing")
+        )
         form = WorkerSearchForm(self.request.GET)
         if form.is_valid():
             return queryset.filter(
@@ -116,7 +124,9 @@ def assign_task_to_worker(request: HttpRequest, pk: int) -> HttpResponse:
         worker.tasks.remove(pk)
     else:
         worker.tasks.add(pk)
-    return HttpResponseRedirect(reverse_lazy("hacelo:task-detail", args=[pk]))
+    return HttpResponseRedirect(
+        reverse_lazy("hacelo:task-detail",args=[pk])
+    )
 
 
 @login_required
@@ -124,4 +134,6 @@ def mark_task_completed(request: HttpRequest, pk: int) -> HttpResponse:
     task = Task.objects.get(id=pk)
     task.is_completed = True
     task.save()
-    return HttpResponseRedirect(reverse_lazy("hacelo:task-detail", args=[pk]))
+    return HttpResponseRedirect(
+        reverse_lazy("hacelo:task-detail", args=[pk])
+    )
