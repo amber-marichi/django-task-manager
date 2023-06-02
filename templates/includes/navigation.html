@@ -1,0 +1,40 @@
+<nav class="navbar fixed-top navbar-expand-md bg-primary">
+  <div class="container">
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a href="{% url 'hacelo:index' %}" class="nav-link"><strong>Taskbar</strong></a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'hacelo:worker-list' %}" class="nav-link"><strong>Workers</strong></a>
+        </li>
+        {% if user.is_authenticated %}
+          <li>
+            <a href="{% url 'hacelo:task-create' %}" class="nav-link">Add new task</a>
+          </li>
+        {% endif %}
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+          <li class="nav-item active" >
+            <a href="{% url 'logout' %}?next={{ request.path }}" class="nav-link">Logout</a>
+          </li>
+          <li class="nav-item active">
+            <a href="{{ user.get_absolute_url }}" class="nav-link">{{ user.get_username }}</a>
+          </li>
+          <li class="nav-item active">
+            <a href="{{ user.get_absolute_url }}">
+              <button type="submit" class="btn btn-link btn-icon btn-round">
+                <i class="tim-icons icon-single-02"></i>
+              </button>
+            </a>
+          </li>
+        {% else %}
+          <li class="nav-item active">
+            <a href="{% url 'login' %}?next={{ request.path }}" class="nav-link">Login</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

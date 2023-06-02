@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+  Delete {{ worker }}
+{% endblock title %}
+  
+
+{% block content %}
+  <div class="container">
+    <div class="row pt-5">
+      <div class="col-md-6 mt-5 offset-md-3 pt-5 mt-5">
+        <div class="card card-nav-tabs text-center">
+          <div class="card-header card-header-primary">        
+            <h4 class="title">
+              Are you sure {{ worker }} should be deleted?
+            </h4>
+          </div>
+          <div class="card-body">
+            <a href="{{ worker.get_absolute_url }}">
+              <button class="btn btn-primary animation-on-hover">No, Back</button>
+            </a>
+            <form action="" method="post">
+              {% csrf_token %}
+              <button class="btn btn-danger animation-on-hover">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet"/>
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/black-dashboard.css' %}">
+  <link rel="stylesheet" href="{% static 'css/nucleo-icons.css' %}">
+  <title>
+    Hacelo - {% block title %}{% endblock title %}
+  </title>
+</head>
+<body>
+
+  <div class="wrapper">
+    {% include "includes/navigation.html" %}
+    <div class="main-panel mt-5">
+      {% block content %}{% endblock content %}
+
+      {% block pagination %}
+        {% include "includes/pagination.html" %}
+      {% endblock pagination %}
+
+      {% include "includes/footer.html" %}
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Main taskboard
+{% endblock title %}
+
+{% block content %}
+  <div class="content">
+    <h3>Sign in and pick your next assingment</h3>
+    <hr>
+    <p><a href="{% url 'hacelo:index' %}">clear search</a></p>
+    <div class="row">
+      <div class="col-9">
+        <div class="card">
+          <form action="" method="get">
+            <div class="card-body">
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="tim-icons icon-zoom-split"></i>
+                   </div>      
+                 </div>
+                <input name="name" type="text" class="form-control" placeholder="Search among tasks...">
+              </div>
+            </div>
+          </form>
+        </div>
+
+        {% for task in tasks %}
+          <div class="card card-nav-tabs text-center">
+            <div class="card-header card-header-primary">
+              Type of task: {{ task.task_type }}
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">{{ task.name }}</h3>
+              <h4 class="card-text"><strong>
+                {{ task.get_priority_display }}</strong> priority, until {{ task.deadline }}
+              </h4>
+              <a href="{{ task.get_absolute_url }}" class="btn btn-primary">See details</a>
+            </div>
+            <div class="card-footer text-muted">
+              currently on task {{ task.assignees__count }} worker{{ task.assignees__count|pluralize }}
+            </div>
+          </div>
+        {% empty %}
+          <h2>No tasks available right now.</h2>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}
